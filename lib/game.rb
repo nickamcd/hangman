@@ -1,14 +1,12 @@
 class Game
   TURN_LIMIT = 6
 
-  def initialize(secret_word = '')
-    @secret_word = secret_word
-    guessed_letters = []
+  def initialize()
+    @secret_word = generate_secret_word
+    @guessed_letters = []
   end
 
   def start_game
-    @secret_word = generate_secret_word().chomp
-
     puts @secret_word
 
     display = Array.new(@secret_word.length)
@@ -16,8 +14,13 @@ class Game
     p display
   end
 
-  def make_guess
+  def valid_guess?(guess)
+    ('a'..'z').include?(guess) && !guesses.include?(guess)
+  end
 
+  def make_guess
+    puts 'Enter a letter to guess from the secret word'
+    guess = gets.chomp
   end
 
   def generate_secret_word
@@ -31,7 +34,7 @@ class Game
       end
     end
 
-    legal_words.sample
+    legal_words.sample.chomp
   end
 end
 
