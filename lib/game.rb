@@ -15,7 +15,7 @@ class Game
   end
 
   def valid_guess?(guess)
-    ('a'..'z').include?(guess) && !guesses.include?(guess)
+    ('a'..'z').include?(guess) && !guessed_letters.include?(guess)
   end
 
   def make_guess
