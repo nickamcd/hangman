@@ -15,11 +15,13 @@ class Game
     p display
     puts "Guesses Left: #{GUESS_LIMIT - incorrect_count}"
 
-    make_guess
+    until incorrect_count == GUESS_LIMIT do
+      make_guess
+    end
   end
 
-  def valid_guess?(guess)
-    ('a'..'z').include?(guess) && !@guessed_letters.include?(guess) 
+  def valid_guess?(player_guess)
+    ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess) 
   end
 
   def make_guess
@@ -31,6 +33,14 @@ class Game
       guess = gets.chomp
     end
 
+    @guessed_letters << guess
+
+    p @guessed_letters
+
+  end
+
+  def check_guess(player_guess)
+    
   end
 
   def generate_secret_word
