@@ -1,5 +1,5 @@
 class Game
-  GUESS_LIMIT = 6
+  GUESS_LIMIT = 8
 
   def initialize()
     @secret_word = generate_secret_word
@@ -36,7 +36,8 @@ class Game
 
   # check if the guess is an unguessed letter
   def valid_guess?(player_guess)
-    ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess) 
+    alphabet_array = [*'a'..'z', *'A'..'Z']
+    alphabet_array.include?(player_guess) && !@guessed_letters.include?(player_guess) 
   end
 
   # filter for length of words in the games dictionary
@@ -70,7 +71,7 @@ class Game
   def check_guess(player_guess, display)
     letter_found = false
     @secret_word.chars.each_with_index do |char, index|
-      if char.downcase == player_guess
+      if char == player_guess
         display[index] = char
         letter_found = true
       end
