@@ -5,29 +5,36 @@ class Game
     @secret_word = generate_secret_word
     @guessed_letters = []
     @incorrect_count = 0
+    @correct_letters = Array.new(@secret_word.length).fill('_')
   end
 
   def start_game
-    puts @secret_word
-    
-
-    correct_letters = Array.new(@secret_word.length)
-    correct_letters.fill('_')
-    p correct_letters
 
     until @incorrect_count == GUESS_LIMIT do
+      system "clear"
+    
+      p @correct_letters
+
       puts "Guesses Left: #{GUESS_LIMIT - @incorrect_count}"
       puts 'Already guessed letters'
       p @guessed_letters
       puts
       player_guess = make_guess
-      if check_guess(player_guess, correct_letters)
+
+      if check_guess(player_guess, @correct_letters)
         puts 'Correct Guess'
       else
         puts 'Incorrect Guess!'
         @incorrect_count += 1
       end
+
+      if win?
+        puts 'Congratulations! You win!'
+        break
+      end
     end
+
+    puts "Correct Word: #{@secret_word}"
   end
 
   def valid_guess?(player_guess)
@@ -36,6 +43,10 @@ class Game
 
   def legal_word?(word)
     word.length >= 5 && word.length <= 12
+  end
+
+  def win?
+    @correct_letters.join == @secret_word
   end
 
   def make_guess
@@ -50,10 +61,6 @@ class Game
     @guessed_letters << guess
 
     guess
-  end
-
-  def win?
-
   end
 
   def check_guess(player_guess, display)
