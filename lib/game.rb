@@ -16,12 +16,20 @@ class Game
     puts "Guesses Left: #{GUESS_LIMIT - incorrect_count}"
 
     until incorrect_count == GUESS_LIMIT do
-      make_guess
+      puts 'Already guessed letters'
+      p @guessed_letters
+      puts
+      player_guess = make_guess
+      check_guess(player_guess)
     end
   end
 
   def valid_guess?(player_guess)
     ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess) 
+  end
+
+  def legal_word?(word)
+    word.length >= 5 && word.length <= 12
   end
 
   def make_guess
@@ -35,12 +43,13 @@ class Game
 
     @guessed_letters << guess
 
-    p @guessed_letters
-
+    guess
   end
 
-  def check_guess(player_guess)
-    
+  def check_guess(player_guess, display)
+    @secret_word.chars.each_with_index do |char, index|
+      puts "#{char} #{index}" if char.downcase == player_guess 
+    end
   end
 
   def generate_secret_word
@@ -49,7 +58,7 @@ class Game
 
     dictionary.each do |line|
       word = line.chomp
-      if word.length >= 5 && word.length <= 12
+      if legal_word?(word)
         legal_words << word
       end
     end
