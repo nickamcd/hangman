@@ -14,6 +14,8 @@ class Game
     until @incorrect_count == GUESS_LIMIT do
       system "clear"
 
+      puts @secret_word
+
       puts "Secret Word: #{@correct_letters}"
 
       puts "Guesses Left: #{GUESS_LIMIT - @incorrect_count}"
@@ -34,18 +36,17 @@ class Game
     puts "Correct Word: #{@secret_word}"
   end
 
-  # check if the guess is an unguessed letter
+  # Check if the guess is an unguessed letter.
   def valid_guess?(player_guess)
-    alphabet_array = [*'a'..'z', *'A'..'Z']
-    alphabet_array.include?(player_guess) && !@guessed_letters.include?(player_guess) 
+    ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess) 
   end
 
-  # filter for length of words in the games dictionary
+  # Filter for length of words in the games dictionary.
   def legal_word?(word)
     word.length >= 5 && word.length <= 12
   end
 
-  # check if user has found the word
+  # Check if user has found the secret word.
   def win?
     @correct_letters.join == @secret_word
   end
@@ -71,7 +72,7 @@ class Game
   def check_guess(player_guess, display)
     letter_found = false
     @secret_word.chars.each_with_index do |char, index|
-      if char == player_guess
+      if char.downcase == player_guess
         display[index] = char
         letter_found = true
       end
