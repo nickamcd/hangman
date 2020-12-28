@@ -8,6 +8,7 @@ class Game
     @correct_letters = Array.new(@secret_word.length).fill('_')
   end
 
+  # Driver for basic game logic.
   def start_game
 
     until @incorrect_count == GUESS_LIMIT do
@@ -37,22 +38,27 @@ class Game
     puts "Correct Word: #{@secret_word}"
   end
 
+  # check if the guess is an unguessed letter
   def valid_guess?(player_guess)
     ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess) 
   end
 
+  # filter for length of words in the games dictionary
   def legal_word?(word)
     word.length >= 5 && word.length <= 12
   end
 
+  # check if user has found the word
   def win?
     @correct_letters.join == @secret_word
   end
 
+  # Get user input.
   def make_guess
     puts 'Enter a letter to guess from the secret word'
     guess = gets.chomp
 
+    # Loop until valid input
     until valid_guess?(guess) do
       puts 'Please enter a letter that you have not guessed before.'
       guess = gets.chomp
@@ -63,6 +69,9 @@ class Game
     guess
   end
 
+  # Display all letters in secret word that were guessed.
+  # Returns true if any letter is guessed (including multiple).
+  # Returns false if no letters are found.
   def check_guess(player_guess, display)
     letter_found = false
     @secret_word.chars.each_with_index do |char, index|
@@ -77,6 +86,8 @@ class Game
     letter_found
   end
 
+  # Opens file and creates dictionary, filtering out
+  # any illegal wrods.
   def generate_secret_word
     dictionary = File.open('5desk.txt', 'r').readlines
     legal_words = []
