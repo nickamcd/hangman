@@ -4,23 +4,29 @@ class Game
   def initialize()
     @secret_word = generate_secret_word
     @guessed_letters = []
+    @incorrect_count = 0
   end
 
   def start_game
     puts @secret_word
-    incorrect_count = 0
+    
 
-    display = Array.new(@secret_word.length)
-    display.fill('_')
-    p display
-    puts "Guesses Left: #{GUESS_LIMIT - incorrect_count}"
+    correct_letters = Array.new(@secret_word.length)
+    correct_letters.fill('_')
+    p correct_letters
 
-    until incorrect_count == GUESS_LIMIT do
+    until @incorrect_count == GUESS_LIMIT do
+      puts "Guesses Left: #{GUESS_LIMIT - @incorrect_count}"
       puts 'Already guessed letters'
       p @guessed_letters
       puts
       player_guess = make_guess
-      check_guess(player_guess)
+      if check_guess(player_guess, correct_letters)
+        puts 'Correct Guess'
+      else
+        puts 'Incorrect Guess!'
+        @incorrect_count += 1
+      end
     end
   end
 
@@ -46,10 +52,22 @@ class Game
     guess
   end
 
+  def win?
+
+  end
+
   def check_guess(player_guess, display)
+    letter_found = false
     @secret_word.chars.each_with_index do |char, index|
-      puts "#{char} #{index}" if char.downcase == player_guess 
+      if char.downcase == player_guess
+        display[index] = char
+        letter_found = true
+      end
     end
+
+    p display
+
+    letter_found
   end
 
   def generate_secret_word
