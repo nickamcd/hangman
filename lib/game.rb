@@ -13,19 +13,15 @@ class Game
 
     until @incorrect_count == GUESS_LIMIT do
       system "clear"
-    
-      p @correct_letters
+
+      puts "Secret Word: #{@correct_letters}"
 
       puts "Guesses Left: #{GUESS_LIMIT - @incorrect_count}"
-      puts 'Already guessed letters'
-      p @guessed_letters
+      puts "Already guessed letters: #{@guessed_letters.to_s}"
       puts
       player_guess = make_guess
 
-      if check_guess(player_guess, @correct_letters)
-        puts 'Correct Guess'
-      else
-        puts 'Incorrect Guess!'
+      unless (check_guess(player_guess, @correct_letters))
         @incorrect_count += 1
       end
 
@@ -65,7 +61,6 @@ class Game
     end
 
     @guessed_letters << guess
-
     guess
   end
 
@@ -80,9 +75,6 @@ class Game
         letter_found = true
       end
     end
-
-    p display
-
     letter_found
   end
 
