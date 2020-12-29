@@ -20,10 +20,14 @@ class Game
     })
   end
 
-  def self.from_yaml(string)
+  def from_yaml(string)
     data = YAML.load string
     p data
-    self.new()
+    @secret_word = data[:secret_word]
+    @guessed_letters = data[:guessed_letters]
+    @incorrect_count = data[:incorrect_count]
+    @correct_letters = data[:correct_letters]
+    self
   end
 
   # Driver for basic game logic.
@@ -75,8 +79,7 @@ class Game
     guess = gets.chomp
 
     if guess == 'save'
-      puts 'saving'
-      File.open('save.yml', 'w') { |file| file.write(self.to_yaml)}
+      save_game
     end
 
     # Loop until valid input
@@ -120,10 +123,7 @@ class Game
   end
 
   def save_game
-
+    puts 'Saving...'
+    File.open('save.yml', 'w') { |file| file.write(self.to_yaml)}
   end
 end
-
-g = Game.new
-
-g.start_game
