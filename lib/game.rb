@@ -36,8 +36,6 @@ class Game
     until @incorrect_count == GUESS_LIMIT do
       system "clear"
 
-      puts @secret_word
-
       puts "Secret Word: #{@correct_letters}"
 
       puts "Guesses Left: #{GUESS_LIMIT - @incorrect_count}"
