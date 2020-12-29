@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 class Game
   GUESS_LIMIT = 8
   attr_accessor :secret_word, :guessed_letters, :incorrect_count, :correct_letters
 
-  def initialize()
+  def initialize
     @secret_word = generate_secret_word
     @guessed_letters = []
     @incorrect_count = 0
@@ -12,16 +14,16 @@ class Game
   end
 
   def to_yaml
-    YAML.dump ({
-      :secret_word => @secret_word,
-      :guessed_letters => @guessed_letters,
-      :incorrect_count => @incorrect_count,
-      :correct_letters => @correct_letters
-    })
+    YAML.dump({
+                secret_word: @secret_word,
+                guessed_letters: @guessed_letters,
+                incorrect_count: @incorrect_count,
+                correct_letters: @correct_letters
+              })
   end
 
   def from_yaml(string)
-    data = YAML.load string
+    data = YAML.safe_load string
     p data
     @secret_word = data[:secret_word]
     @guessed_letters = data[:guessed_letters]
@@ -32,20 +34,17 @@ class Game
 
   # Driver for basic game logic.
   def start_game
-
-    until @incorrect_count == GUESS_LIMIT do
-      system "clear"
+    until @incorrect_count == GUESS_LIMIT
+      system 'clear'
 
       puts "Secret Word: #{@correct_letters}"
 
       puts "Guesses Left: #{GUESS_LIMIT - @incorrect_count}"
-      puts "Already guessed letters: #{@guessed_letters.to_s}"
+      puts "Already guessed letters: #{@guessed_letters}"
       puts
       player_guess = make_guess
 
-      unless (check_guess(player_guess, @correct_letters))
-        @incorrect_count += 1
-      end
+      @incorrect_count += 1 unless check_guess(player_guess, @correct_letters)
 
       if win?
         puts 'Congratulations! You win!'
@@ -58,7 +57,7 @@ class Game
 
   # Check if the guess is an unguessed letter.
   def valid_guess?(player_guess)
-    ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess) 
+    ('a'..'z').include?(player_guess) && !@guessed_letters.include?(player_guess)
   end
 
   # Filter for length of words in the games dictionary.
@@ -74,7 +73,7 @@ class Game
   # Get user input.
   def make_guess
     puts 'Enter a letter to guess from the secret word'
-    puts "Enter \"save\" to save and exit."
+    puts 'Enter "save" to save and exit.'
     guess = gets.chomp
 
     if guess == 'save'
@@ -83,7 +82,7 @@ class Game
     end
 
     # Loop until valid input
-    until valid_guess?(guess) do
+    until valid_guess?(guess)
       puts 'Please enter a letter that you have not guessed before.'
       guess = gets.chomp
     end
@@ -114,9 +113,7 @@ class Game
 
     dictionary.each do |line|
       word = line.chomp
-      if legal_word?(word)
-        legal_words << word
-      end
+      legal_words << word if legal_word?(word)
     end
 
     legal_words.sample
@@ -124,6 +121,6 @@ class Game
 
   def save_game
     puts 'Saving...'
-    File.open('saves/save.yml', 'w') { |file| file.write(self.to_yaml)}
+    File.open('saves/save.yml', 'w') { |file| file.write(to_yaml) }
   end
 end
