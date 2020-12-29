@@ -1,11 +1,29 @@
+require 'yaml'
+
 class Game
   GUESS_LIMIT = 8
+  attr_accessor :secret_word, :guessed_letters, :incorrect_count, :correct_letters
 
   def initialize()
     @secret_word = generate_secret_word
     @guessed_letters = []
     @incorrect_count = 0
     @correct_letters = Array.new(@secret_word.length).fill('_')
+  end
+
+  def to_yaml
+    YAML.dump ({
+      :secret_word => @secret_word,
+      :guessed_letters => @guessed_letters,
+      :incorrect_count => @incorrect_count,
+      :correct_letters => @correct_letters
+    })
+  end
+
+  def self.from_yaml(string)
+    data = YAML.load string
+    p data
+    self.new()
   end
 
   # Driver for basic game logic.
@@ -56,6 +74,11 @@ class Game
     puts 'Enter a letter to guess from the secret word'
     guess = gets.chomp
 
+    if guess == 'save'
+      puts 'saving'
+      File.open('save.yml', 'w') { |file| file.write(self.to_yaml)}
+    end
+
     # Loop until valid input
     until valid_guess?(guess) do
       puts 'Please enter a letter that you have not guessed before.'
@@ -94,6 +117,10 @@ class Game
     end
 
     legal_words.sample
+  end
+
+  def save_game
+
   end
 end
 
