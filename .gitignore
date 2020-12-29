@@ -1,1 +1,3 @@
-save.yml
+saves/*
+!saves/.gitkeep
+!.gitignore

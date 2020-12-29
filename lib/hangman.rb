@@ -14,7 +14,7 @@ class Hangman
   if choice == '1'
     g.start_game
   elsif choice == '2'
-    g = g.from_yaml(File.open('save.yml', 'r'))
+    g = g.from_yaml(File.open('saves/save.yml', 'r'))
     g.start_game
   else choice == '3'
     exit

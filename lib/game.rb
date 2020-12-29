@@ -76,10 +76,12 @@ class Game
   # Get user input.
   def make_guess
     puts 'Enter a letter to guess from the secret word'
+    puts "Enter \"save\" to save and exit."
     guess = gets.chomp
 
     if guess == 'save'
       save_game
+      exit
     end
 
     # Loop until valid input
@@ -124,6 +126,6 @@ class Game
 
   def save_game
     puts 'Saving...'
-    File.open('save.yml', 'w') { |file| file.write(self.to_yaml)}
+    File.open('saves/save.yml', 'w') { |file| file.write(self.to_yaml)}
   end
 end
